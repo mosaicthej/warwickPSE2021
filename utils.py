@@ -218,3 +218,11 @@ def fileFile2Room(roomid:str):
     return fileStr2Room(roomString)
 
 
+def allRoomNameInDir() -> list[str]:
+    """get all room names in directory
+    Returns:
+        list[str]: list of room names
+    """
+    import os
+    return [filename.split(".txt")[0] for filename in os.listdir("Rooms")]
+

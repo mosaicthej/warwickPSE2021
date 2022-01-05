@@ -156,7 +156,7 @@ class TimeSlot:
             and timepoint<= self.endTime)
     
 
-    def timePointsAfter(self, startTime:TimePoint) -> List[TimePoint]:
+    def timePointsAfter(self, startTime:TimePoint) -> list[TimePoint]:
         """
         Args:
             startTime (TimePoint): where to start count
