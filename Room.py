@@ -1,11 +1,14 @@
 from TimeSlot import *
 import utils
 
+# "declare" the classes just to bypass linter on annotations
 class Room:
-    def __init__(self, id:str, capacity:int, equipment:set[str],
-        location:str, availability: list[TimeSlot]) -> None:
-        """make a new Room object
+    pass
 
+class Room:
+    def __init__(self, id:str, capacity:int, location:str, 
+        equipment:set[str], availability: list[TimeSlot]) -> Room:
+        """make a new Room object
         Args:
             id (str): Room id or number, used to identify a room
             capacity (int): max people can be in the room
@@ -111,8 +114,8 @@ afternoonPeriod = TimeSlot(afternoonBegin,afternoonEnd)
 
 allDay = TimeSlot(dayBegin, dayEnd)
 
-r = Room("SA-J", 15, ("light","blackboard","chalk"),
-"CCIS-L20", [allDay])
+r = Room("SA-J", 15, "CCIS-L20", 
+    {"light","blackboard","chalk"}, [allDay])
 print(r.getAvailablity())
 
 r.bookAt(afternoonPeriod)
