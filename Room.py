@@ -1,5 +1,5 @@
 from TimeSlot import *
-import utils
+from utils import *
 
 # "declare" the classes just to bypass linter on annotations
 class Room:
@@ -16,6 +16,7 @@ class Room:
             location (str): location of the room (which building/ which floor/ etc.)
             availability (list[TimeSlot]): a sorted list of TimeSlots that represent when this is able to book.
         """
+        self.id = id
         self.capacity = capacity
         self.equipment = equipment
         self.location = location
@@ -80,7 +81,7 @@ class Room:
 
     # common getters
 
-    def getAvailablity(self) -> list[TimeSlot]:
+    def get_availability(self) -> list[TimeSlot]:
         """getting all the availability times for this room
 
         Returns:
@@ -100,6 +101,14 @@ class Room:
     def get_location(self) -> str:
         return self.location
 
+    def __eq__(self, other) -> bool:
+        eq = True
+        return (self.id == other.get_id()
+            and self.equipment == other.get_equipment()
+            and self.capacity == other.get_capacity()
+            and self.location == other.get_location()
+            and self.availability == other.get_availability())
+
 
 
 # driver codes for testing purposes
@@ -116,7 +125,16 @@ allDay = TimeSlot(dayBegin, dayEnd)
 
 r = Room("SA-J", 15, "CCIS-L20", 
     {"light","blackboard","chalk"}, [allDay])
-print(r.getAvailablity())
+print(r.get_availability())
 
 r.bookAt(afternoonPeriod)
-print(r.getAvailablity())
+print(r.get_availability())
+
+r1 = Room("SA-K", 8, "CCIS-L2", 
+    {"light","blackboard","chalk"}, [allDay])
+
+r2 = Room("SA-F", 7, "CCIS-L2", 
+    {"light","blackboard","chalk"}, [allDay])
+
+for k in (r, r1, r2):
+    fileRoom2File(k)

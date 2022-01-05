@@ -27,8 +27,6 @@ def binarySearch(arr, l, r, x):
 # utils for file reading and writing.
 # saving all data using a .csv file
 import datetime
-import Room
-from TimeSlot import *
 # for details, see roomTemplate.csv and reservationTemplate.csv
 def fileStr2EquipmentSet(fileStr: str) -> set[str]:
     """file util function: convert a line in saved data file to set of equipment
@@ -48,11 +46,11 @@ def fileEquipmentSet2Str(equipment:set[str]) -> str:
     """
     return ",".join(str(e) for e in equipment)
 
-def fileTS2Str(ts:TimeSlot) -> str:
+def fileTimeSlot2Str(ts) -> str:
     """convert this TimeSlot object to a string
         which keeps all information of this object.
         The string can be later used to reversely make 
-        the same TimeSlot object using fileStr2TS() function.
+        the same TimeSlot object using fileStr2TimeSlot() function.
 
     Returns:
         str: a string contains all the information of this object.
@@ -76,7 +74,9 @@ def fileTS2Str(ts:TimeSlot) -> str:
             
     return hs+"__"+ts
 
-def fileStr2TS(tsStr:str) -> TimeSlot:
+def fileStr2TimeSlot(tsStr:str):
+    from TimeSlot import TimeSlot
+    from TimeSlot import TimePoint
     """reverse operation for fileTS2Str(), which takes a
         formatted string and convert to a TimeSlot object.
 
@@ -90,22 +90,45 @@ def fileStr2TS(tsStr:str) -> TimeSlot:
                 from    January 4th 2022. 08:30 (quarter 2)
                 to      January 6th 2022. 18:00 (quarter 0)     
     """
-    "08.2-01/04/2022__18.0-01/06/2022"
     dateFormat = "%m/%d/%Y"
-    (strHead, strTail) = tsStr.split("__")
-    (strHeadTime, strHeadDate) = strHead.split("-")
-    (strTailTime, strTimeDate) = strTail.split("-")
-    headHour, headQuarter = (int(k) for k in (strHeadTime.split(".")))
+    (strHead, strTail) = tsStr.split("__")[:2]
+    (strHeadTime, strHeadDate) = strHead.split("-")[:2]
+    (strTailTime, strTimeDate) = strTail.split("-")[:2]
+    headHour, headQuarter = (int(k) for k in (strHeadTime.split(".")[:2]))
     headDate = datetime.datetime.strptime(strHeadDate, dateFormat).date()
-    tailHour, tailQuarter = (int(k) for k in (strTailTime.split(".")))
+    tailHour, tailQuarter = (int(k) for k in (strTailTime.split(".")[:2]))
     tailDate = datetime.datetime.strptime(strTimeDate,dateFormat).date()
     
     headTimePoint, tailTimePoint = TimePoint(headHour, headQuarter, headDate), TimePoint(tailHour, tailQuarter, tailDate)
     parsed = TimeSlot(headTimePoint, tailTimePoint)
     return parsed
 
+def fileAvailability2Str(availability) -> str:
+    """from room's availability field to string
+    comma-split all the time slots in the list
 
-def room2File(room:Room) -> str:
+    Args:
+        availability (list[TimeSlot]): 
+            Availability attribute of Room,
+            which is a list of TimeSlot objects
+
+    Returns:
+        str: comma-splitted string of timeslot objects
+    """
+    return ",".join(fileTimeSlot2Str(ts) for ts in availability)
+
+def fileStr2Availability(avaStr:str) -> list:
+    """from string in file to the availability attribute of Room object,
+    the reverse-operation of fileAvailability2Str()
+    Args:
+        avaStr (str): comma-splitted string of timeslot objects 
+            representing the availability
+    Returns:
+        list[TimeSlot]: list of available times for the room object.
+    """
+    return [fileStr2TimeSlot(ts) for ts in avaStr.split(",")]
+
+def fileRoom2Str(room) -> str:
     """ convert this Room object to a string
         which keeps all information of this object.
         The string can be later used to reversely make 
@@ -123,3 +146,75 @@ def room2File(room:Room) -> str:
                 17.2-01/04/2022__18.0-01/06/2022, ...'
             (multiline str)
     """
+    outStr = ""
+    # first line data (id, capacity, location)
+    outStr += (room.get_id() + ","
+                + str(room.get_capacity())
+                + "," + room.get_location() + "\n")
+    
+    # second line data (equipment)
+    outStr += fileEquipmentSet2Str(room.get_equipment()) + "\n"
+
+    # third line data (availability)
+    outStr += fileAvailability2Str(room.get_availability())
+
+    return outStr
+
+def fileStr2Room(fileStr: str):
+    """reverse operation of fileRoom2Str(), 
+    which loads a room object from a string in the formatted file
+    Args:
+        fileStr (str): a formatted multiline string that contains the room object.
+    Returns:
+        Room: the output object.
+    for examples, see fileRoom2Str()
+    """
+    from Room import Room
+
+    (line1, line2, line3) = fileStr.split("\n")[:3]
+    
+    # first line data: (id, capacity, location)
+    (name, capacity, location) = line1.split(",")[:3]
+    capacity = int(capacity)
+
+    # second line data: (equipment)
+    equipment = fileStr2EquipmentSet(line2)
+
+    # third line data: (availability)
+    availability = fileStr2Availability(line3)
+
+    return Room(name, capacity, location, equipment, availability)
+
+
+def fileRoom2File(room) -> None:
+    """write the data of one room to a file
+    with filename = roomName
+    
+    Args:
+        room (Room): a Room object
+    """
+    filePath = "Rooms\\"+room.get_id()+".txt"
+    # open file and write the room data in file
+    with open(filePath, "w") as writer:
+        writer.write(
+            fileRoom2Str(room)
+        )
+    return
+
+def fileFile2Room(roomid:str):
+    """load a room object from the file
+    given pathname
+
+    Args:
+        roomid (str): the id of room,
+        which is also the filename of the file 
+
+    Returns:
+        Room: the room object described by the file
+    """
+    filePath = "Rooms\\"+roomid+".txt"
+    with open(filePath, "r") as reader:
+        roomString = reader.read()
+    return fileStr2Room(roomString)
+
+

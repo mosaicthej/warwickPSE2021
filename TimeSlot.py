@@ -11,6 +11,33 @@ class TimePoint:
         self.quarter = quarter
         self.date = date
 
+    def next(self) -> TimePoint:
+        """
+        Returns:
+            TimePoint: TimePoint at next quarter
+        """
+        if not self.quarter == 3:
+            return TimePoint(self.hour, self.quarter+1, self.date)
+        else: # quarter == 3
+            if not self.hour == 23:
+                return TimePoint(self.hour+1, 0, self.date)
+            else: # hour == 23
+                return TimePoint(0, 0, self.date + datetime.timedelta(days=1)) 
+    
+    def previous(self) -> TimePoint:
+        """
+        Returns:
+            TimePoint: TimePoint at previous quarter
+        """
+        if not self.quarter == 0:
+            return TimePoint(self.hour, self.quarter-1, self.date)
+        else: # if quarter is 0, borrow from previous hour
+            if not self.hour == 0:
+                return TimePoint(self.hour-1, 3, self.date)
+            else: # if hour also 0, borrow from previous dat
+                return TimePoint(23, 3, self.date + datetime.timedelta(days=1))
+
+
     # for comparsions
     def __eq__(self, o: TimePoint) -> bool:
         return (self.hour == o.hour) and (self.quarter == o.quarter) and (self.date == o.date)
@@ -118,6 +145,31 @@ class TimeSlot:
                 fragments.append(TimeSlot(taker.endTime, self.endTime))
         return fragments
 
+    def contains(self, timepoint:TimePoint) -> bool:
+        """check if timepoint is inside this time slot
+        Args:
+            timepoint (TimePoint): a timepoint object
+        Returns:
+            bool: true if timepoint is inside this time slot.
+        """
+        return (timepoint<= self.beginTime
+            and timepoint<= self.endTime)
+    
+
+    def timePointsAfter(self, startTime:TimePoint) -> List[TimePoint]:
+        """
+        Args:
+            startTime (TimePoint): where to start count
+        Returns:
+            List[TimePoint]: List of all timepoints before end of this slot.
+        """
+        timePointsList = []
+        while startTime < self.endTime:
+            tps.append(startTime)
+            startTime = startTime.next()
+        return timePointsList
+
+
     def get_head(self) -> TimePoint:
         """getter for the head of the timeslot
 
@@ -138,3 +190,6 @@ class TimeSlot:
     def __str__(self) -> str:
         return "timeslot from: "+str(self.beginTime)+" to "+str(self.endTime)
 
+    def __eq__(self, other) -> bool:
+        return (self.beginTime == other.get_head()
+            and self.endTime == other.get_tail())
