@@ -1,8 +1,5 @@
 # Python3 Program for recursive binary search.
-
 # Returns index of x in arr if present, else -1
-
-
 def binarySearch(arr, l, r, x):
 
 	# Check base case
@@ -27,14 +24,8 @@ def binarySearch(arr, l, r, x):
 		return -1
 
 
-# # Driver Code
-# arr = [2, 3, 4, 10, 40]
-# x = 10
+# utils for file reading and writing.
+# saving all data using a .csv file
 
-# # Function call
-# result = binarySearch(arr, 0, len(arr)-1, x)
+# for details, see roomTemplate.csv and reservationTemplate.csv
 
-# if result != -1:
-# 	print("Element is present at index % d" % result)
-# else:
-# 	print("Element is not present in array")

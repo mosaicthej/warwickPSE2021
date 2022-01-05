@@ -2,7 +2,7 @@ from TimeSlot import *
 import utils
 
 class Room:
-    def __init__(self, id:str, capacity:int, equipment:tuple[str],
+    def __init__(self, id:str, capacity:int, equipment:set[str],
         location:str, availability: list[TimeSlot]) -> None:
         """make a new Room object
 
@@ -91,7 +91,7 @@ class Room:
     def get_capacity(self) -> int:
         return self.capacity
 
-    def get_equipment(self) -> object:
+    def get_equipment(self) -> set[str]:
         return self.equipment
 
     def get_location(self) -> str:
