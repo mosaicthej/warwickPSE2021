@@ -105,14 +105,14 @@ def fileStr2TS(tsStr:str) -> TimeSlot:
     return parsed
 
 
-def fileRoom2Str(room:Room) -> str:
+def room2File(room:Room) -> str:
     """ convert this Room object to a string
         which keeps all information of this object.
         The string can be later used to reversely make 
             the same Room object using fileStr2Room() function.
 
     Args:
-        room (Room): example:{
+        room (Room): example: room{
             r.name = 'HL-212'; r.capacity = 7; r.location = Cameron Library South Wing Lower 2;
             r.equipment = {'blackboard', 'chalk', 'light'}
             r.availability = [TimeSlot from <17:30 01/04/2022> to <18:00 01/06/2022>, ...]}
