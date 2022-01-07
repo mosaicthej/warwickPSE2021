@@ -3,17 +3,17 @@ from utils import *
 
 
 class Room:
-    def __init__(self, id:str, capacity:int, location:str, 
+    def __init__(self, name:str, capacity:int, location:str, 
         equipment:set[str], availability: list[TimeSlot]) -> None:
         """make a new Room object
         Args:
-            id (str): Room id or number, used to identify a room
+            name (str): Room name, used to identify a room (unique)
             capacity (int): max people can be in the room
             equipment (tuple[str]): a list of equipments that the room contains
             location (str): location of the room (which building/ which floor/ etc.)
             availability (list[TimeSlot]): a sorted list of TimeSlots that represent when this is able to book.
         """
-        self.id = id
+        self.name = name
         self.capacity = capacity
         self.equipment = equipment
         self.location = location
@@ -87,7 +87,7 @@ class Room:
         return self.availability
 
     def get_id(self) -> str:
-        return self.id
+        return self.name
 
     def get_capacity(self) -> int:
         return self.capacity
@@ -99,7 +99,7 @@ class Room:
         return self.location
 
     def __eq__(self, other) -> bool:
-        return (self.id == other.get_id()
+        return (self.name == other.get_id()
             and self.equipment == other.get_equipment()
             and self.capacity == other.get_capacity()
             and self.location == other.get_location()
@@ -107,6 +107,11 @@ class Room:
 
     def __ne__(self, other) -> bool:
         return not (self == other)
+
+    def __str__(self) -> str:
+        availabilityListStr = ",".join( map( str, self.availability ) )
+        return (f"room: {self.name}, located at {self.location}, can take on most {self.capacity} people. This room has equipment: {self.equipment}. Room is available at {availabilityListStr}")
+
 
 # driver codes for testing purposes
 dayBegin = TimePoint(0, 0, datetime.date.today())
@@ -119,19 +124,26 @@ afternoonEnd = TimePoint(17,2, datetime.date.today())
 afternoonPeriod = TimeSlot(afternoonBegin,afternoonEnd)
 
 allDay = TimeSlot(dayBegin, dayEnd)
+allDayList = [allDay]
 
+from equipment import *
 r = Room("SA-J", 15, "CCIS-L20", 
-    {"light","blackboard","chalk"}, [allDay])
+    FULL_SET, [allDay])
 print(r.get_availability())
 
 r.bookAt(afternoonPeriod)
 print(r.get_availability())
 
 r1 = Room("SA-K", 8, "CCIS-L2", 
-    {"light","blackboard","chalk"}, [allDay])
+    {FULL_DICT['1'], FULL_DICT['2'],FULL_DICT['3']}, [allDay])
 
 r2 = Room("SA-F", 7, "CCIS-L2", 
-    {"light","blackboard","chalk"}, [allDay])
+    {FULL_DICT['4'], FULL_DICT['5'], FULL_DICT['6'], FULL_DICT['7']}, [allDay])
 
 for k in (r, r1, r2):
     fileRoom2File(k)
+    
+
+print(r)
+print()
+print(r1)
