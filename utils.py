@@ -227,7 +227,7 @@ def allRoomNameInDir() -> list[str]:
     import os
     return [filename.split(".txt")[0] for filename in os.listdir("Rooms")]
 
-@staticmethod
+
 def filter_room(roomList: list, equipment: set[str] = {}, 
                 location: str = "", capacity: int = -1, availability: list = []) -> list:
                 
@@ -241,12 +241,22 @@ def filter_room(roomList: list, equipment: set[str] = {},
     Returns:
         list[Room]: a list of Room objects that match the conditions.
     """
-    returnList = []
+    filtered = []
 
     for room in roomList:
-        pass = false
+        isValidPlace = False
+        # Testing for equipment
         if equipment.issubset(room.get_equipment()):
-            if location == room.get_location():
+            # Testing for location
+            if (location == room.get_location()) or (len(location==0)):
+                # Testing for capacity
                 if capacity <= room.get_capacity():
-                    if availability
-    pass
+                    isValidPlace = True
+                    # Testing for availability
+                    isFreeOnDemand = True
+                    for timeslot in availability:
+                        if not room.availiableAt(timeslot):
+                            isFreeOnDemand = False
+        if isValidPlace and isFreeOnDemand:
+            filtered.append(room)
+    return filtered
