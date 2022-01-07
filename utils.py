@@ -46,6 +46,7 @@ def fileEquipmentSet2Str(equipment:set[str]) -> str:
     """
     return ",".join(str(e) for e in equipment)
 
+
 def fileTimeSlot2Str(ts) -> str:
     """convert this TimeSlot object to a string
         which keeps all information of this object.
@@ -226,3 +227,26 @@ def allRoomNameInDir() -> list[str]:
     import os
     return [filename.split(".txt")[0] for filename in os.listdir("Rooms")]
 
+@staticmethod
+def filter_room(roomList: list, equipment: set[str] = {}, 
+                location: str = "", capacity: int = -1, availability: list = []) -> list:
+                
+    """filter the list of inputed rooms to return only the rooms that match the conditions
+    Args:
+        roomList (list[Room]): Input of available rooms
+        equipment (set[str]): Required equipment. None by default
+        location (str): location of the room. empty by default
+        capacity (int): minimium capacity of the room. no requirement by default
+        availability (list[TimeSlot]): a list of required time slots that room need to be available. None by default
+    Returns:
+        list[Room]: a list of Room objects that match the conditions.
+    """
+    returnList = []
+
+    for room in roomList:
+        pass = false
+        if equipment.issubset(room.get_equipment()):
+            if location == room.get_location():
+                if capacity <= room.get_capacity():
+                    if availability
+    pass

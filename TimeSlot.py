@@ -165,7 +165,7 @@ class TimeSlot:
         """
         timePointsList = []
         while startTime < self.endTime:
-            tps.append(startTime)
+            timePointsList.append(startTime)
             startTime = startTime.next()
         return timePointsList
 

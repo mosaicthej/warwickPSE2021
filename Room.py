@@ -1,13 +1,10 @@
 from TimeSlot import *
 from utils import *
 
-# "declare" the classes just to bypass linter on annotations
-class Room:
-    pass
 
 class Room:
     def __init__(self, id:str, capacity:int, location:str, 
-        equipment:set[str], availability: list[TimeSlot]) -> Room:
+        equipment:set[str], availability: list[TimeSlot]) -> None:
         """make a new Room object
         Args:
             id (str): Room id or number, used to identify a room
@@ -102,14 +99,14 @@ class Room:
         return self.location
 
     def __eq__(self, other) -> bool:
-        eq = True
         return (self.id == other.get_id()
             and self.equipment == other.get_equipment()
             and self.capacity == other.get_capacity()
             and self.location == other.get_location()
             and self.availability == other.get_availability())
 
-
+    def __ne__(self, other) -> bool:
+        return not (self == other)
 
 # driver codes for testing purposes
 dayBegin = TimePoint(0, 0, datetime.date.today())
