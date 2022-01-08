@@ -1,3 +1,3 @@
 SA-F,7,CCIS-L2
-light,chalk,blackboard
-00.0-01/07/2022__00.0-01/08/2022
+Plasma/ LCD Screen,White board,Black board,Lapel Microphone
+00.0-01/08/2022__00.0-01/09/2022

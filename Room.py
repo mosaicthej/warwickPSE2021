@@ -112,39 +112,42 @@ class Room:
         availabilityListStr = ",".join( map( str, self.availability ) )
         return (f"room: {self.name}, located at {self.location}, can take on most {self.capacity} people. This room has equipment: {self.equipment}. Room is available at {availabilityListStr}")
 
+def main():
+        
+    # driver codes for testing purposes
+    dayBegin = TimePoint(0, 0, datetime.date.today())
+    # today
+    dayEnd = TimePoint(0,0, datetime.date.today() + datetime.timedelta(days=1))
+    # tomorrow
 
-# driver codes for testing purposes
-dayBegin = TimePoint(0, 0, datetime.date.today())
-# today
-dayEnd = TimePoint(0,0, datetime.date.today() + datetime.timedelta(days=1))
-# tomorrow
+    afternoonBegin = TimePoint(13, 0, datetime.date.today())
+    afternoonEnd = TimePoint(17,2, datetime.date.today())
+    afternoonPeriod = TimeSlot(afternoonBegin,afternoonEnd)
 
-afternoonBegin = TimePoint(13, 0, datetime.date.today())
-afternoonEnd = TimePoint(17,2, datetime.date.today())
-afternoonPeriod = TimeSlot(afternoonBegin,afternoonEnd)
+    allDay = TimeSlot(dayBegin, dayEnd)
+    allDayList = [allDay]
 
-allDay = TimeSlot(dayBegin, dayEnd)
-allDayList = [allDay]
+    import equipment
+    r = Room("SA-J", 15, "CCIS-L20", 
+        equipment.FULL_DICT.values(), [allDay])
+    print(r.get_availability())
 
-from equipment import *
-r = Room("SA-J", 15, "CCIS-L20", 
-    FULL_DICT.values(), [allDay])
-print(r.get_availability())
+    r.bookAt(afternoonPeriod)
+    print(r.get_availability())
 
-r.bookAt(afternoonPeriod)
-print(r.get_availability())
+    r1 = Room("SA-K", 8, "CCIS-L2", 
+        {equipment.FULL_DICT['1'], equipment.FULL_DICT['2'],equipment.FULL_DICT['3']}, [allDay])
 
-r1 = Room("SA-K", 8, "CCIS-L2", 
-    {FULL_DICT['1'], FULL_DICT['2'],FULL_DICT['3']}, [allDay])
+    r2 = Room("SA-F", 7, "CCIS-L2", 
+        {equipment.FULL_DICT['4'], equipment.FULL_DICT['5'], equipment.FULL_DICT['6'], equipment.FULL_DICT['7']}, [allDay])
 
-r2 = Room("SA-F", 7, "CCIS-L2", 
-    {FULL_DICT['4'], FULL_DICT['5'], FULL_DICT['6'], FULL_DICT['7']}, [allDay])
+    for k in (r, r1, r2):
+        fileRoom2File(k)
+        
 
-for k in (r, r1, r2):
-    fileRoom2File(k)
-    
+    print(r)
+    print()
+    print(r1)
 
-print(r)
-print()
-print(r1)
-
+if __name__ == '__main__':
+    main()

@@ -187,7 +187,7 @@ def fileStr2Room(fileStr: str):
     return Room(name, capacity, location, equipment, availability)
 
 
-def fileRoom2File(room) -> None:
+def fileRoom2File(room, inDir = False) -> None:
     """write the data of one room to a file
     with filename = roomName
     
@@ -195,6 +195,8 @@ def fileRoom2File(room) -> None:
         room (Room): a Room object
     """
     filePath = "Rooms\\"+room.get_id()+".txt"
+    if inDir:
+        filePath = room.get_id()+".txt"
     # open file and write the room data in file
     with open(filePath, "w") as writer:
         writer.write(
@@ -202,7 +204,26 @@ def fileRoom2File(room) -> None:
         )
     return
 
-def fileFile2Room(roomid:str):
+def fileFile2Room(filename:str, inDir = False):
+    """load a room object from the file
+    given pathname
+
+    Args:
+        roomid (str): the id of room,
+        which is also the filename of the file 
+
+    Returns:
+        Room: the room object described by the file
+    """
+    filePath = "Rooms\\"+filename
+    if inDir:
+        filePath = filename
+    with open(filePath, "r") as reader:
+        roomString = reader.read()
+    return fileStr2Room(roomString)
+
+
+def fileFile2RoomFromID(roomid:str, inDir=False):
     """load a room object from the file
     given pathname
 
@@ -214,6 +235,8 @@ def fileFile2Room(roomid:str):
         Room: the room object described by the file
     """
     filePath = "Rooms\\"+roomid+".txt"
+    if inDir:
+        filePath = roomid+".txt"
     with open(filePath, "r") as reader:
         roomString = reader.read()
     return fileStr2Room(roomString)
@@ -232,12 +255,14 @@ def fileStr2Reservation(inp):
     
     return Reservation(name, contact, roomName, timeslot)
 
-def fileReservation2File(res):
+def fileReservation2File(res, inDir= False):
     name = ""
     name += res.getName().strip(" ")+"_"+res.getRoomName()+"_"
     name += res.getTimeSlot().get_head().strName()
     
     filePath = "Reservations\\"+name+".txt"
+    if inDir:
+        filePath = name+".txt"
     # open file and write the room data in file
     with open(filePath, "w") as writer:
         writer.write(
@@ -246,8 +271,10 @@ def fileReservation2File(res):
     return
 
 
-def fileFile2Reseration(fileName):
+def fileFile2Reseration(fileName, inDir=False):
     filePath = "Reservations\\"+fileName
+    if inDir:
+        filePath = fileName
     with open(filePath, "r") as reader:
         resString = reader.read()
     return fileStr2Reservation(resString)

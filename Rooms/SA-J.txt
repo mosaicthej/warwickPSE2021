@@ -1,3 +1,3 @@
 SA-J,15,CCIS-L20
-Bluray Player,Dual Projection,MS Teams Wireless Microphone,Document Camera,MS Teams Enhanced AV,Lapel Microphone,Plasma/ LCD Screen,Laptop Input,Lecture Capture,MS Teams Video Camera,Laptop Input (HDMI),White board,Black board,Catchbox,Fixed Computer,Touch Screen Monitor,Solstice Wireless Casting,Induction Loop,Lecture Capture Camera,Clevertouch,Data Projector,Audio and Video Conferencing
-00.0-01/07/2022__13.0-01/07/2022,17.2-01/07/2022__00.0-01/08/2022
+Data Projector,Fixed Computer,Laptop Input,Plasma/ LCD Screen,Black board,White board,Lapel Microphone,Induction Loop,Document Camera,Bluray Player,Lecture Capture,Solstice Wireless Casting,Lecture Capture Camera,Touch Screen Monitor,Audio and Video Conferencing,Catchbox,Clevertouch,Dual Projection,Laptop Input (HDMI),MS Teams Wireless Microphone,MS Teams Video Camera,MS Teams Enhanced AV
+00.0-01/08/2022__13.0-01/08/2022,17.2-01/08/2022__00.0-01/09/2022

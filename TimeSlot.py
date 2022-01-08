@@ -80,7 +80,7 @@ class TimePoint:
     def __str__(self) -> str:
         # return "TimePoint at " + str(self.date) +"-"+ str(self.hour) +":"+ str(self.quarter*15)
 
-        return f"TimePoint at {self.date.strftime("%b-%d-%Y")} {self.hour:02}:{self.quarter*15:02}"
+        return f"TimePoint at {self.date:%Y-%m-%d} {self.hour:02}:{self.quarter*15:02}"
 
     def strName(self) -> str:
         return f"t{self.date:%Y-%m-%d}_{self.hour:02}_{self.quarter}"
