@@ -23,7 +23,7 @@ def main():
                 keepRun = False
             else: wrongEntryMsg()
                 
-                
+
 def wrongEntryMsg():
     print("Wrong entry, please enter you input again")
 
@@ -127,3 +127,6 @@ def pickTime():
     quarterTail = int(input("0<=m<60"))//15
     timetail = TimeSlot.TimePoint(hourTail, quarterTail, dateTail)
     return TimeSlot.TimeSlot(timehead, timetail)
+
+if __name__ == "__main__":
+    main()
