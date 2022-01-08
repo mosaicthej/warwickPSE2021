@@ -234,14 +234,14 @@ def fileStr2Reservation(inp):
 
 def fileReservation2File(res):
     name = ""
-    name += res.getName()+"_"+res.getRoomName()+"_"
-    name += res.getTimeSlot().get_head().__repr__()
+    name += res.getName().strip(" ")+"_"+res.getRoomName()+"_"
+    name += res.getTimeSlot().get_head().strName()
     
-    filePath = "Reservation\\"+name+".txt"
+    filePath = "Reservations\\"+name+".txt"
     # open file and write the room data in file
     with open(filePath, "w") as writer:
         writer.write(
-            fileRoom2Str(res)
+            fileReservation2Str(res)
         )
     return
 
@@ -296,8 +296,8 @@ def filter_room(roomList: list, equipment: set[str] = {},
             filtered.append(room)
     return filtered
 
-import Room
-def findRoomByName(searchName:str, roomList: list[Room.Room]) -> list[Room.Room]:
+
+def findRoomByName(searchName:str, roomList: list) -> list:
     matchingRooms = []
     
     for room in roomList:
