@@ -128,7 +128,7 @@ allDayList = [allDay]
 
 from equipment import *
 r = Room("SA-J", 15, "CCIS-L20", 
-    FULL_SET, [allDay])
+    FULL_DICT.values(), [allDay])
 print(r.get_availability())
 
 r.bookAt(afternoonPeriod)
@@ -147,3 +147,4 @@ for k in (r, r1, r2):
 print(r)
 print()
 print(r1)
+

@@ -81,6 +81,8 @@ class TimePoint:
         # return "TimePoint at " + str(self.date) +"-"+ str(self.hour) +":"+ str(self.quarter*15)
         return f"TimePoint at {self.date:%Y-%m-%d} {self.hour:02}:{self.quarter*15:02}"
 
+    def __repr__(self) -> str:
+        return f"{self.date:%Y%m%d}_{self.hour}_{self.quarter}"
 
 
 class TimeSlot:

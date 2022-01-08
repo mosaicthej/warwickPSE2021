@@ -218,6 +218,40 @@ def fileFile2Room(roomid:str):
         roomString = reader.read()
     return fileStr2Room(roomString)
 
+def fileReservation2Str(reservation):
+    outStr = ""
+    outStr += reservation.getName() + ", " + reservation.getContact() + "," + reservation.getRoomName()+"\n"
+    outStr += fileTimeSlot2Str(reservation.getTimeSlot())
+    return outStr
+
+def fileStr2Reservation(inp):
+    from Reservation import Reservation
+    (line1, line2) = inp.split("\n")
+    (name, contact, roomName) = line1.split(",")[:3]
+    timeslot = fileStr2TimeSlot(line2)
+    
+    return Reservation(name, contact, roomName, timeslot)
+
+def fileReservation2File(res):
+    name = ""
+    name += res.getName()+"_"+res.getRoomName()+"_"
+    name += res.getTimeSlot().get_head().__repr__()
+    
+    filePath = "Reservation\\"+name+".txt"
+    # open file and write the room data in file
+    with open(filePath, "w") as writer:
+        writer.write(
+            fileRoom2Str(res)
+        )
+    return
+
+
+def fileFile2Reseration(fileName):
+    filePath = "Reservations\\"+fileName
+    with open(filePath, "r") as reader:
+        resString = reader.read()
+    return fileStr2Reservation(resString)
+
 
 def allRoomNameInDir() -> list[str]:
     """get all room names in directory
@@ -226,6 +260,7 @@ def allRoomNameInDir() -> list[str]:
     """
     import os
     return [filename.split(".txt")[0] for filename in os.listdir("Rooms")]
+
 
 
 def filter_room(roomList: list, equipment: set[str] = {}, 
@@ -260,3 +295,12 @@ def filter_room(roomList: list, equipment: set[str] = {},
         if isValidPlace and isFreeOnDemand:
             filtered.append(room)
     return filtered
+
+import Room
+def findRoomByName(searchName:str, roomList: list[Room.Room]) -> list[Room.Room]:
+    matchingRooms = []
+    
+    for room in roomList:
+        if searchName in room.name:
+            matchingRooms.append(room)
+    return matchingRooms
