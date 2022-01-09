@@ -10,19 +10,19 @@ def main():
 
     keepRun = True
 
-
-    while keepRun:
-        wrongEntry = True
-        while wrongEntry and keepRun:
-            inp01 = input("enter 1 to view all rooms, to exit, enter -1")
-            if inp01 == "1":
-                keepView = False
-                while keepView:
-                    keepView = viewRooms()
-            elif inp01 == "-1":
-                keepRun = False
-            else: wrongEntryMsg()
-                
+    wrongEntry = True
+    while keepRun and wrongEntry:
+ 
+        inp01 = input("enter 1 to view all rooms, to exit, enter -1")
+        if inp01 == "1":
+            keepView = True
+            while keepView:
+                keepView = viewRooms()
+                print("viewRooms")
+        elif inp01 == "-1":
+            keepRun = False
+        else: wrongEntryMsg()
+            
 
 def wrongEntryMsg():
     print("Wrong entry, please enter you input again")
@@ -104,11 +104,9 @@ def bookRoom(room):
 
 def pickTime():
     print("enter your desired start booking date")
-    dateinpHead = input("mm/dd/yyyy")
-    dateinpListHead = dateinpHead.split("/")
-    dateStrHead = "%"+dateinpListHead[0]+"-%"+dateinpListHead[1]+"-%"+dateinpListHead[2]
+    dateinpHead = input("mm-dd-yyyy")
     import datetime
-    dateHead = datetime.datetime.strptime(dateStrHead, "%Y-%m-%d")
+    dateHead = datetime.datetime.strptime(dateinpHead, "%d-%m-%Y")
     print("enter your desired start booking hour")
     hourHead = int(input("0<=h<24: "))
     print("enter your desired end booking minute")
@@ -119,8 +117,8 @@ def pickTime():
     print("enter your desired end booking date")
     dateinpTail = input("mm/dd/yyyy")
     dateinpListTail = dateinpTail.split("/")
-    dateStrTail = "%"+dateinpListTail[0]+"-%"+dateinpListTail[1]+"-%"+dateinpListTail[2]
-    dateTail = datetime.datetime.strptime(dateStrTail, "%Y-%m-%d")
+    dateStrTail = ""+dateinpListTail[0]+"-"+dateinpListTail[1]+"-"+dateinpListTail[2]
+    dateTail = datetime.datetime.strptime(dateStrTail, "%d-%m-%Y")
     print("enter your desired end booking hour")
     hourTail = int(input("0<=h<24: "))
     print("enter your desired end booking minute")
