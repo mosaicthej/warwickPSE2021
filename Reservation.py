@@ -10,4 +10,3 @@ class Reservation:
     def getRoomName(self): return self.roomName
     def getTimeSlot(self): return self.timeSlot
     
-    
