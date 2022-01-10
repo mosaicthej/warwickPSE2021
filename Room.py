@@ -110,7 +110,7 @@ class Room:
 
     def __str__(self) -> str:
         availabilityListStr = ",".join( map( str, self.availability ) )
-        return (f"room: {self.name}, located at {self.location}, can take on most {self.capacity} people. This room has equipment: {self.equipment}. Room is available at {availabilityListStr}")
+        return (f"room: {self.name}, located at {self.location}, can take on most {self.capacity} people. \nThis room has equipment: \n{self.equipment}. \nRoom is available at:\n \n{availabilityListStr}")
 
 def main():
         

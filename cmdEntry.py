@@ -1,4 +1,8 @@
-from tkinter.constants import W
+import os
+PATH_HOME = os.getcwd()
+PATH_ROOM = os.path.join(PATH_HOME, "Rooms")
+PATH_RES = os.path.join(PATH_HOME,"Reservations")
+
 
 
 def main(): 
@@ -11,14 +15,15 @@ def main():
     keepRun = True
 
     wrongEntry = True
-    while keepRun and wrongEntry:
+    while keepRun and wrongEntry:  
+        os.chdir(PATH_HOME)
  
-        inp01 = input("enter 1 to view all rooms, to exit, enter -1")
+        inp01 = input("enter 1 to view all rooms, to exit, enter -1: ")
         if inp01 == "1":
             keepView = True
             while keepView:
                 keepView = viewRooms()
-                print("viewRooms")
+                # print("viewRooms")
         elif inp01 == "-1":
             keepRun = False
         else: wrongEntryMsg()
@@ -30,8 +35,9 @@ def wrongEntryMsg():
 
 def viewRooms():
     import glob, os
-    
-    os.chdir("Rooms")
+
+    # print(f"in viewRooms(): cwd at {os.getcwd()}")
+    os.chdir(PATH_ROOM)
     roomFiles = []
     roomNames = []
     i = 0
@@ -46,7 +52,7 @@ def viewRooms():
     
     wrongEntry = True; keepView = False;
     while wrongEntry:
-        roomNum = input("Enter a number to view details") 
+        roomNum = input("Enter a number to view details: ") 
         if roomNum.isnumeric():
             roomNum = int(roomNum)
             if 0<=roomNum and roomNum <= len(roomNames):
@@ -58,7 +64,7 @@ def viewRooms():
         else:
             wrongEntryMsg()
     
-    os.chdir("/..")
+    os.chdir(PATH_HOME)
     
     
 def roomDetail(roomFileName):
@@ -67,24 +73,22 @@ def roomDetail(roomFileName):
     print(room)
     wrongEntry = True
     while wrongEntry:
-        inp = input("Do you want to book this room? (y/n)")
+        inp = input("Do you want to book this room? (y/n): ")
         if inp == "y":
             wrongEntry = False
             res,room = bookRoom(room)
             utils.fileRoom2File(room, True)
-            
-            os.chdir("/..")
-            utils.fileReservation2File(res)
-            os.chdir("Rooms")
         elif inp == "n":
             wrongEntry = False
         else: wrongEntryMsg()
+
+    os.chdir(PATH_HOME)
     return 
 
 def bookRoom(room):
     import Reservation
-    name = input("please enter your name").strip(",")
-    contact = input("please enter your contact").strip(",")
+    name = input("please enter your name: ").strip(",")
+    contact = input("please enter your contact: ").strip(",")
     roomName = room.get_id()
     print("booking for "+roomName+"...")
     print("room is available at following timeslots:")
@@ -102,27 +106,67 @@ def bookRoom(room):
     res = Reservation.Reservation(name, contact, roomName, timeSlot)
     return (res, room)
 
+def dateInp():
+    wrongInp = True
+    while wrongInp:
+        wrongInp = False
+        dateinp = input("mm-dd-yyyy: ")
+        import datetime
+        try:
+            date = datetime.datetime.strptime(dateinp, "%m-%d-%Y")
+        except ValueError:
+            print("invalid input! please enter again mm-dd-yyyy")
+            wrongInp = True
+    return date
+def hourInp():
+    wrongInp = True
+    while wrongInp:
+        wrongInp = False
+        try: 
+            hour = int(input("0<=h<24: "))
+            if (hour < 0) or (hour > 23):
+                print("invalid input! please enter again 0<=h<24")
+                wrongInp = True 
+        except ValueError:
+            print("invalid input! please enter again 0<=h<24")
+            wrongInp = True
+    return hour
+
+def quarterInp():
+    wrongInp = True
+    while wrongInp:
+        wrongInp = False
+        try: 
+            minute = int(input("0<=m<60: "))
+            if (minute < 0) or (minute > 60):
+                print("invalid input! please enter again 0<=m<60")
+                wrongInp = True 
+        except ValueError:
+            print("invalid input! please enter again 0<=m<60")
+            wrongInp = True
+    return minute//15
+    
+
 def pickTime():
     print("enter your desired start booking date")
-    dateinpHead = input("mm-dd-yyyy")
-    import datetime
-    dateHead = datetime.datetime.strptime(dateinpHead, "%d-%m-%Y")
+    dateHead = dateInp()
+
     print("enter your desired start booking hour")
-    hourHead = int(input("0<=h<24: "))
+    hourHead = hourInp()
+        
     print("enter your desired end booking minute")
-    quarterHead = int(input("0<=m<60"))//15
+    quarterHead = quarterInp()
     import TimeSlot
     timehead = TimeSlot.TimePoint(hourHead, quarterHead, dateHead)
     
     print("enter your desired end booking date")
-    dateinpTail = input("mm/dd/yyyy")
-    dateinpListTail = dateinpTail.split("/")
-    dateStrTail = ""+dateinpListTail[0]+"-"+dateinpListTail[1]+"-"+dateinpListTail[2]
-    dateTail = datetime.datetime.strptime(dateStrTail, "%d-%m-%Y")
+    dateTail = dateInp()
+
     print("enter your desired end booking hour")
-    hourTail = int(input("0<=h<24: "))
+    hourTail = hourInp()
+    
     print("enter your desired end booking minute")
-    quarterTail = int(input("0<=m<60"))//15
+    quarterTail = quarterInp()
     timetail = TimeSlot.TimePoint(hourTail, quarterTail, dateTail)
     return TimeSlot.TimeSlot(timehead, timetail)
 
